@@ -1,38 +1,38 @@
 package com.dji.djicamerademo;
 
 
-        import android.Manifest;
-        import android.app.Activity;
-        import android.content.BroadcastReceiver;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.IntentFilter;
-        import android.content.pm.PackageManager;
-        import android.os.AsyncTask;
-        import android.os.Build;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.Manifest;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import androidx.annotation.NonNull;
-        import androidx.core.app.ActivityCompat;
-        import androidx.core.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-        import dji.common.error.DJIError;
-        import dji.common.error.DJISDKError;
-        import dji.log.DJILog;
-        import dji.sdk.base.BaseComponent;
-        import dji.sdk.base.BaseProduct;
-        import dji.sdk.products.Aircraft;
-        import dji.sdk.sdkmanager.DJISDKInitEvent;
-        import dji.sdk.sdkmanager.DJISDKManager;
+import dji.common.error.DJIError;
+import dji.common.error.DJISDKError;
+import dji.log.DJILog;
+import dji.sdk.base.BaseComponent;
+import dji.sdk.base.BaseProduct;
+import dji.sdk.products.Aircraft;
+import dji.sdk.sdkmanager.DJISDKInitEvent;
+import dji.sdk.sdkmanager.DJISDKManager;
 
 public class ConnectionActivity extends Activity implements View.OnClickListener {
 
@@ -126,7 +126,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    showToast( "registering, pls wait...");
+                    showToast("registering, pls wait...");
                     DJISDKManager.getInstance().registerApp(getApplicationContext(), new DJISDKManager.SDKManagerCallback() {
                         @Override
                         public void onRegister(DJIError djiError) {
@@ -135,7 +135,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
                                 DJISDKManager.getInstance().startConnectionToProduct();
                                 showToast("Register Success");
                             } else {
-                                showToast( "Register sdk fails, check network is available");
+                                showToast("Register sdk fails, check network is available");
                             }
                             Log.v(TAG, djiError.getDescription());
                         }
@@ -146,12 +146,14 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
                             showToast("Product Disconnected");
 
                         }
+
                         @Override
                         public void onProductConnect(BaseProduct baseProduct) {
                             Log.d(TAG, String.format("onProductConnect newProduct:%s", baseProduct));
                             showToast("Product Connected");
 
                         }
+
                         @Override
                         public void onComponentChange(BaseProduct.ComponentKey componentKey, BaseComponent oldComponent,
                                                       BaseComponent newComponent) {
@@ -234,6 +236,13 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
 
     private void refreshSDKRelativeUI() {
         BaseProduct mProduct = FPVDemoApplication.getProductInstance();
+
+        if (mProduct == null) {
+            Toast.makeText(this, "IS NULL", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "IS CONNECTED: " + mProduct.isConnected(), Toast.LENGTH_SHORT).show();
+        }
+
 
         if (null != mProduct && mProduct.isConnected()) {
 
